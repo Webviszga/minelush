@@ -5,24 +5,20 @@ import {
   writeResponseToNodeResponse,
 } from '@angular/ssr/node';
 import express from 'express';
+import { createProxyMiddleware } from 'http-proxy-middleware';
 import { join } from 'node:path';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
+const backendUrl = process.env['BACKEND_URL'] || 'http://localhost:8090';
 
 const app = express();
 const angularApp = new AngularNodeAppEngine();
 
 /**
- * Example Express Rest API endpoints can be defined here.
- * Uncomment and define endpoints as necessary.
- *
- * Example:
- * ```ts
- * app.get('/api/{*splat}', (req, res) => {
- *   // Handle API request
- * });
- * ```
+ * Az /api/* kéréseket továbbítjuk a Spring Boot backendnek.
+ * A target végére azért kell az /api, mert az Express levágja a mount path-t.
  */
+app.use('/api', createProxyMiddleware({ target: `${backendUrl}/api`, changeOrigin: true }));
 
 /**
  * Serve static files from /browser
