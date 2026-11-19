@@ -1,2 +1,3 @@
 # Környezeti változók (jelszavak) – soha ne kerüljön gitre
 .env
+frontend/src/img/video.mp4
