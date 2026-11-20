@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { LoginDialog } from './login-dialog/login-dialog';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
+  imports: [LoginDialog],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })

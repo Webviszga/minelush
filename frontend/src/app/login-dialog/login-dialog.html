@@ -1,0 +1,82 @@
+<dialog
+  #dialog
+  class="login-dialog"
+  aria-labelledby="login-title"
+  (close)="onClosed()"
+  (click)="onDialogClick($event)"
+>
+  <div class="panel">
+    <button type="button" class="close" (click)="close()" aria-label="Bezárás">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+      </svg>
+    </button>
+
+    <span class="eyebrow">FIÓK</span>
+    <h2 id="login-title">Bejelentkezés</h2>
+    <p class="lead">A szerveren használt Minecraft neveddel és jelszavaddal léphetsz be.</p>
+
+    <form novalidate (submit)="onSubmit($event)">
+      <label class="field-label" for="login-name">Minecraft név</label>
+      <input
+        id="login-name"
+        type="text"
+        autocomplete="username"
+        spellcheck="false"
+        autofocus
+        [formField]="loginForm.name"
+        [attr.aria-invalid]="loginForm.name().touched() && loginForm.name().invalid()"
+        aria-describedby="login-name-error"
+      />
+      <p class="error" id="login-name-error">
+        @if (loginForm.name().touched() && loginForm.name().errors()[0]; as err) {
+          {{ err.message }}
+        }
+      </p>
+
+      <label class="field-label" for="login-password">Jelszó</label>
+      <div class="password-wrap">
+        <input
+          id="login-password"
+          [attr.type]="showPassword() ? 'text' : 'password'"
+          autocomplete="current-password"
+          [formField]="loginForm.password"
+          [attr.aria-invalid]="loginForm.password().touched() && loginForm.password().invalid()"
+          aria-describedby="login-password-error"
+        />
+        <button
+          type="button"
+          class="eye"
+          (click)="togglePassword()"
+          [attr.aria-pressed]="showPassword()"
+          aria-label="Jelszó mutatása"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" fill="none" stroke="currentColor" stroke-width="1.8" />
+            <circle cx="12" cy="12" r="3" fill="currentColor" />
+          </svg>
+        </button>
+      </div>
+      <p class="error" id="login-password-error">
+        @if (loginForm.password().touched() && loginForm.password().errors()[0]; as err) {
+          {{ err.message }}
+        }
+      </p>
+
+      <label class="remember">
+        <input type="checkbox" [formField]="loginForm.remember" />
+        Emlékezz rám ezen az eszközön
+      </label>
+
+      <button class="submit" type="submit" [disabled]="loginForm().submitting()">
+        {{ loginForm().submitting() ? 'Bejelentkezés…' : 'Bejelentkezés' }}
+      </button>
+      <p class="form-error" role="alert">{{ error() }}</p>
+    </form>
+
+    <p class="register">
+      Még nincs fiókod? Lépj be a szerverre (<code>play.minelush.hu</code>), és írd be:
+      <code>/register [jelszó] [jelszó]</code>. <a href="#utmutato">Útmutató →</a>
+    </p>
+  </div>
+</dialog>
